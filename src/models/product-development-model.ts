@@ -9,4 +9,6 @@ export interface FormFields {
     video: File | null;
     image: File | null;
     equipmentList: string[];
+    cookingTime : string,
+    servingPerson:string
   }
