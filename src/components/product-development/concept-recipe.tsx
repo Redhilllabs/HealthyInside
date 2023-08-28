@@ -1,75 +1,101 @@
 import React, { useState } from "react";
 import { FormFields } from "@/models/product-development-model";
-import {
-  List,
-  ThemeIcon,
-  Divider,
-  Modal,
-} from "@mantine/core";
+import { List, ThemeIcon, Divider, Modal } from "@mantine/core";
 import { IconCircleCheck } from "@tabler/icons-react";
 import { IconAlertCircle } from "@tabler/icons-react";
+import { Notification } from "@mantine/core";
+import { IconCheck, IconX } from "@tabler/icons-react";
+import { Transition } from "@mantine/core";
 const ConceptRecipe = () => {
-    const [ingredient, setIngredient] = useState({
-        ingredientName: "",
-        ingredientUnit: "",
-        ingredientQuantity: "",
-      });
-      const [formFields, setFormFields] = useState<FormFields>({
-        recipeName: "",
-        ingredientList: [],
-        cookingProcess: "",
-        video: null,
-        image: null,
-        cookingTime : '',
-        equipmentList: [],
-        servingPerson:''
+  const [ingredient, setIngredient] = useState({
+    ingredientName: "",
+    ingredientUnit: "",
+    ingredientQuantity: "",
+  });
+  const [formFields, setFormFields] = useState<FormFields>({
+    recipeName: "",
+    ingredientList: [],
+    cookingProcess: "",
+    video: null,
+    image: null,
+    cookingTime: "",
+    equipmentList: [],
+    servingPerson: "",
+  });
+  const [showAlert, setShowAlert] = useState(false);
+  const [equipment, setEquipment] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
 
-      });
-      const [showAlert, setShowAlert] = useState(false);
-      const [equipment, setEquipment] = useState("");
-    
-      const handleAddIngredient = () => {
-        if (
-          !ingredient.ingredientName ||
-          !ingredient.ingredientQuantity ||
-          !ingredient.ingredientUnit
-        ) {
-          setShowAlert(true);
-          return;
-        }
-    
-        setFormFields({
-          ...formFields,
-          ingredientList: [...formFields.ingredientList, ingredient],
-        });
-    
-        setIngredient({
-          ingredientName: "",
-          ingredientQuantity: "",
-          ingredientUnit: "gm",
-        });
-      };
-    
-      const handleAddEquipment = () => {
-        if (!equipment) {
-          setShowAlert(true);
-          return;
-        }
-    
-        setFormFields({
-          ...formFields,
-          equipmentList: [...formFields.equipmentList, equipment],
-        });
-        setEquipment("");
-      };
-    
-      const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log("Form submitted with data:", formFields);
-      };
+  const handleAddIngredient = () => {
+    if (
+      !ingredient.ingredientName ||
+      !ingredient.ingredientQuantity ||
+      !ingredient.ingredientUnit
+    ) {
+      setShowAlert(true);
+      return;
+    }
+
+    setFormFields({
+      ...formFields,
+      ingredientList: [...formFields.ingredientList, ingredient],
+    });
+
+    setIngredient({
+      ingredientName: "",
+      ingredientQuantity: "",
+      ingredientUnit: "gm",
+    });
+  };
+
+  const handleAddEquipment = () => {
+    if (!equipment) {
+      setShowAlert(true);
+      return;
+    }
+
+    setFormFields({
+      ...formFields,
+      equipmentList: [...formFields.equipmentList, equipment],
+    });
+    setEquipment("");
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setShowNotification(true);
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    console.log("Form submitted with data:", formFields);
+  };
   return (
     <div className="col-md-12 border bg-white p-3 rounded">
-      <form className="row mt-2" onSubmit={(e) => handleSubmit}>
+      <form className="row mt-2" onSubmit={(e) => handleSubmit(e)}>
+        {showNotification && (
+          <Transition
+            mounted={showNotification}
+            transition="slide-right"
+            duration={100}
+            timingFunction="ease"
+          >
+            {(styles) => (
+              <div style={styles}>
+                {" "}
+                <Notification
+                  icon={<IconCheck size="1.1rem" />}
+                  onClose={() => setShowNotification(false)}
+                  color="teal"
+                  title="Success"
+                >
+                  Your Concept is Saved
+                </Notification>
+              </div>
+            )}
+          </Transition>
+        )}
         <Modal
           size="sm"
           padding="md"
@@ -92,22 +118,20 @@ const ConceptRecipe = () => {
           </div>
           <div className="mb-3">
             <div className="row p-0">
-           
-            <div className="col">
-            <label className="form-label">
-              Cooking Time <span className="text-danger">*</span>{" "}
-            </label>
-              <input type="time" className="form-control" required />
+              <div className="col">
+                <label className="form-label">
+                  Cooking Time <span className="text-danger">*</span>{" "}
+                </label>
+                <input type="time" className="form-control" required />
+              </div>
+
+              <div className="col">
+                <label className="form-label">
+                  Serving Person <span className="text-danger">*</span>{" "}
+                </label>
+                <input type="number" className="form-control" required />
+              </div>
             </div>
-            
-            <div className="col">
-              <label className="form-label">
-              Serving Person <span className="text-danger">*</span>{" "}
-            </label>
-              <input type="number" className="form-control" required />
-            </div>
-            </div>
-            
           </div>
 
           <div className="mb-3">
@@ -199,7 +223,7 @@ const ConceptRecipe = () => {
           <div className="mb-3">
             <label className="form-label">Upload Image</label>
             <div className="col">
-              <input type="file" className="form-control" required />
+              <input type="file" className="form-control" />
             </div>
           </div>
           <div className="mb-3">
@@ -212,7 +236,6 @@ const ConceptRecipe = () => {
                 className="form-control"
                 placeholder="Equipments"
               />
-               
             </div>
             <button
               type="button"
@@ -284,7 +307,7 @@ const ConceptRecipe = () => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default ConceptRecipe
+export default ConceptRecipe;
