@@ -1,14 +1,15 @@
+export interface Ingredient {
+  ingredientName: string;
+  ingredientUnit: string;
+  ingredientQuantity: string;
+}
 export interface FormFields {
-    recipeName: string;
-    ingredientList: Array<{
-      ingredientName: string;
-      ingredientUnit: string;
-      ingredientQuantity: string;
-    }>;
-    cookingProcess: string;
-    video: File | null;
-    image: File | null;
-    equipmentList: string[];
-    cookingTime : string,
-    servingPerson:string
-  }
+  recipeName: string;
+  ingredientList: Ingredient[];
+  cookingProcess: string;
+  video: File | null;
+  image: File | null;
+  equipmentList: string[];
+  cookingTime: string;
+  servingPerson: string;
+}
