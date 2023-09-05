@@ -6,6 +6,7 @@ import { FormFields } from "@/models/product-development-model";
 
 const TestRecipe = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [hidebutton,setbuttonfalse] = useState(true);
   const [modalContent, setModalContent] = useState<string[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<string | null>(null);
   const [enableEdit, setEnableEdit] = useState(false);
@@ -19,14 +20,15 @@ const TestRecipe = () => {
       "Recipe6",
     ]);
     open();
+    setbuttonfalse(false)
   };
 
   const renderButton = (label: string) => (
     <div className="m-3">
       <Button
-        color="blue"
-        size="md"
-        compact
+        color="indigo"
+        radius="xs"
+        size="xl"
         uppercase
         onClick={() => OpenRecipesList(label)}
       >
@@ -68,41 +70,56 @@ const TestRecipe = () => {
 
   return (
     <div className="container">
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="LIST"
-        size="55%"
-        scrollAreaComponent={ScrollArea.Autosize}
-        transitionProps={{ transition: "fade", duration: 200 }}
-      >
-        {modalContent.map((item, index) => (
-          <div
-            key={item}
-            className="list bg-primary text-center m-1 text-white"
-            onClick={() => renderPreviewRecipe(item)}
-          >
-            <p>{item}</p>
+      {hidebutton && (
+        <div className="container p-5 text-center bg-white">
+          <div className="d-flex justify-content-center">
+            <div className="d-flex flex-wrap">
+              {renderButton("New Recipes")}
+              {renderButton("Tested Recipe")}
+              {renderButton("In-Test Recipes")}
+            </div>
           </div>
-        ))}
-      </Modal>
-      <div className="d-flex">
-        {renderButton("New Recipes")}
-        {renderButton("Tested Recipe")}
-        {renderButton("In-Test Recipes")}
-        {renderButton("Rejected Recipe")}
-        {renderButton("Incomplete Data")}
-      </div>
-      <div className="container">
-        {selectedRecipe && (
-          <div>
-            <button
-              className="btn bg-primary text-white m-1"
-              onClick={() => setEnableEdit(true)}
+          <br />
+          <div className="d-flex justify-content-center">
+            <div className="d-flex flex-wrap">
+              {renderButton("Rejected Recipe")}
+              {renderButton("Incomplete Data")}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div>
+        {opened &&
+          modalContent.map((item, index) => (
+            <div
+              key={item}
+              className="list bg-primary text-center m-1 text-white"
+              onClick={() => renderPreviewRecipe(item)}
             >
-              Edit
-            </button>
-            <RecipeForm loadFormData={recipe} edit={enableEdit} />
+              <p>{item}</p>
+            </div>
+          ))}
+      </div>
+
+      <div className="col-md-12 border bg-white p-3 rounded">
+        {selectedRecipe && (
+          <div className="row mt-2">
+            <div className="d-flex justify-content-between">
+              <button
+                className="btn bg-primary text-white m-1"
+                onClick={() => setEnableEdit(true)}
+              >
+                Edit
+              </button>
+              <button className="btn bg-primary text-white m-1">Skip</button>
+            </div>
+
+            <RecipeForm
+              loadFormData={recipe}
+              edit={enableEdit}
+              onFormSubmit={(data) => setRecipe(data)}
+            />
           </div>
         )}
       </div>

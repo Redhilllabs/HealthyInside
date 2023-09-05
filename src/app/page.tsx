@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { IconChecklist, IconDeviceDesktopAnalytics } from "@tabler/icons-react";
+import { IconChecklist, IconDeviceDesktopAnalytics ,IconUsers } from "@tabler/icons-react";
 import Statistics from "@/components/statistics";
 import NavbarComponent from "@/components/navbar";
 import { useDisclosure } from "@mantine/hooks";
@@ -118,7 +118,7 @@ const Homepage = () => {
                     mr="xl"
                   />
                 </MediaQuery>
-                <Text>DashBoard</Text>
+                <Text onClick={()=>setCurrentTab("statistics")}>DashBoard</Text>
                 <MediaQuery
                   query="(max-width: 1000px) and (min-width: 250px)"
                   styles={{ display: "none" }}
@@ -131,7 +131,7 @@ const Homepage = () => {
                   </Box>
                 </MediaQuery>
 
-                <div>LoginInfo</div>
+                <Box><IconUsers size="0.8rem"/></Box>
               </div>
             </Header>
           }
@@ -142,29 +142,44 @@ const Homepage = () => {
               hidden={!opened}
               width={{ sm: 200, lg: 200 }}
             >
-              <Tabs
-                variant="pills"
-                radius="md"
-                orientation="vertical"
-                defaultValue="statistics"
-                onTabChange={(value: string) => {
-                  setCurrentTab(value);
-                  setOpened(!opened);
-                }}
-                value={currentTab}
-              >
-                <Tabs.List>
-                  <Tabs.Tab
-                    value="statistics"
-                    icon={<IconDeviceDesktopAnalytics size="0.8rem" />}
-                  >
-                    Statistics
-                  </Tabs.Tab>
-                  <Tabs.Tab value="task" icon={<IconChecklist size="0.8rem" />}>
-                    Task
-                  </Tabs.Tab>
-                </Tabs.List>
-              </Tabs>
+             <Tabs
+  variant="pills"
+  radius="md"
+  orientation="vertical"
+  defaultValue="statistics"
+  onTabChange={(value: string) => {
+    setCurrentTab(value);
+    setOpened(!opened);
+  }}
+  value={currentTab}
+>
+  {currentTab === "productDevelopment" || currentTab === "conceptRecipe" || currentTab === "testRecipe" ? (
+    <Tabs.List>
+      <Tabs.Tab
+        value="conceptRecipe"
+        icon={<IconDeviceDesktopAnalytics size="0.8rem" />}
+      >
+       Concept recipe
+      </Tabs.Tab>
+      <Tabs.Tab value="testRecipe" icon={<IconChecklist size="0.8rem" />}>
+        Test Recipe
+      </Tabs.Tab>
+    </Tabs.List>
+  ) : (
+    <Tabs.List>
+      <Tabs.Tab
+        value="statistics"
+        icon={<IconDeviceDesktopAnalytics size="0.8rem" />}
+      >
+        Statistics
+      </Tabs.Tab>
+      <Tabs.Tab value="task" icon={<IconChecklist size="0.8rem" />}>
+        Task
+      </Tabs.Tab>
+    </Tabs.List>
+  )}
+</Tabs>
+
               <MediaQuery
                 query="(min-width: 900px)"
                 styles={{ display: "none" }}
