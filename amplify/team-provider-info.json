@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-erp-dev-95044-authRole",
+      "UnauthRoleArn": "arn:aws:iam::793248635284:role/amplify-erp-dev-95044-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::793248635284:role/amplify-erp-dev-95044-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-erp-dev-95044-deployment",
+      "UnauthRoleName": "amplify-erp-dev-95044-unauthRole",
+      "StackName": "amplify-erp-dev-95044",
+      "StackId": "arn:aws:cloudformation:us-east-1:793248635284:stack/amplify-erp-dev-95044/16fbe430-4dff-11ee-827d-1216b881aaa1",
+      "AmplifyAppId": "d380fjkn3jakyz"
+    }
+  }
+}

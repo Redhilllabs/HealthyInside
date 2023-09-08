@@ -56,28 +56,27 @@ const Statistics = () => {
   });
 
   return (
-    <div className="container" style={{ width: "50%" }}>
+    <div className="container" style={{ width: "100%" }}>
+  <div className="col">
+    <div className="col-md-6">
       <Bar options={options} data={userData} />
-      <div className="container">
-        <div className="d-flex mt-3">
-          <div className="m-2">
-            <Button color="blue" size="xl" uppercase>
-              MemberShip 100
-            </Button>
-          </div>
-          <div className="m-2">
-            <Button color="yellow" size="xl" uppercase>
-              Todays Sales 80
-            </Button>
-          </div>
-          <div className="m-2">
-            <Button color="red" size="xl" uppercase>
-              Todays Profits 69%
-            </Button>
-          </div>
+    </div>
+    <div className="col-md-6">
+      <div className="d-flex flex-column mt-3">
+        <div className="m-2">
+          <button className="btn bg-primary text-white">Membership 100</button>
+        </div>
+        <div className="m-2">
+          <button className="btn bg-success text-white">Todays Sales 80</button>
+        </div>
+        <div className="m-2">
+          <button className="btn bg-danger text-white">Todays Profits 69%</button>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
   );
 };
 

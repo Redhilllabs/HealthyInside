@@ -7,9 +7,10 @@ export interface FormFields {
   recipeName: string;
   ingredientList: Ingredient[];
   cookingProcess: string;
-  video: File | null;
-  image: File | null;
+  video: string | ArrayBuffer | null;
+  image: string | ArrayBuffer | null;
   equipmentList: string[];
   cookingTime: string;
   servingPerson: string;
 }
+

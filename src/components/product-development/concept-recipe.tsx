@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Modal, Notification, Transition } from "@mantine/core";
 import { IconAlertCircle, IconCheck } from "@tabler/icons-react";
 import RecipeForm from "../recipe-form";
+import { SaveConceptRecipe } from "@/services/save-concept-recipe-service";
+import { FormFields } from "@/models/product-development-model";
 
 const ConceptRecipe = () => {
   const initialRecipe = {
@@ -16,15 +18,23 @@ const ConceptRecipe = () => {
   };
   const [showNotification, setShowNotification] = useState(false);
 
-  const SaveConceptData = async (data: any) => {
-    console.log("data", data);
-// apiurl = "https://lmsmhn4kg8.execute-api.us-east-1.amazonaws.com/prod"
-    setShowNotification(true);
-    setTimeout(() => {
-      setShowNotification(false);
-    }, 3000);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const SaveConceptData = async (data: FormFields) => {
+    try {
+      const response = await SaveConceptRecipe(data);
+      if (response) {
+        setShowNotification(true);
+        setTimeout(() => {
+          setShowNotification(false);
+        }, 3000);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        console.error("API request failed with status:", response);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
+
   return (
     <div className="col-md-12 border bg-white p-3 rounded">
       {showNotification && (

@@ -6,7 +6,7 @@ import { FormFields } from "@/models/product-development-model";
 
 const TestRecipe = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [hidebutton,setbuttonfalse] = useState(true);
+  const [hidebutton, setbuttonfalse] = useState(true);
   const [modalContent, setModalContent] = useState<string[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<string | null>(null);
   const [enableEdit, setEnableEdit] = useState(false);
@@ -20,7 +20,7 @@ const TestRecipe = () => {
       "Recipe6",
     ]);
     open();
-    setbuttonfalse(false)
+    setbuttonfalse(false);
   };
 
   const renderButton = (label: string) => (

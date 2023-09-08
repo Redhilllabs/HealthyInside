@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from "react";
 import { FormFields } from "@/models/product-development-model";
 import { List, ThemeIcon, Divider } from "@mantine/core";
 import { IconCircleCheck } from "@tabler/icons-react";
+import Image from "next/image";
 const RecipeForm = ({
   loadFormData,
   edit,
@@ -53,6 +54,50 @@ const RecipeForm = ({
     });
     setEquipment("");
   };
+  const handleImageChange = (e: any) => {
+    const selectedFile = e.target.files && e.target.files[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64String = event?.target?.result ?? "";
+        setFormFields({
+          ...formFields,
+          image: base64String,
+        });
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  
+  // const handleVideoUpload = (e: any) => {
+  //   const selectedFile = e.target.files && e.target.files[0];
+
+  //   if (selectedFile) {
+  //     const allowedVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
+
+  //     if (allowedVideoTypes.includes(selectedFile.type)) {
+  //       const reader = new FileReader();
+
+  //       reader.onload = (e) => {
+  //         const base64Video = e?.target?.result || '';
+  //         setFormFields({
+  //           ...formFields,
+  //           video: base64Video,
+  //         });
+  //       };
+
+  //       reader.onerror = (error) => {
+  //         console.error('Error reading file:', error);
+  //       };
+
+  //       reader.readAsDataURL(selectedFile);
+  //     } else {
+  //       // Handle the case where the selected file is not a valid video
+  //       alert('Please select a valid video file (MP4, WebM, or OGG)');
+  //     }
+  //   }
+  // };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,10 +106,10 @@ const RecipeForm = ({
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-    
+
     setError(false);
     onFormSubmit(formFields);
-    setFormFields(loadFormData)
+    // setFormFields(loadFormData);
   };
   return (
     <>
@@ -135,7 +180,9 @@ const RecipeForm = ({
             <div className="mb-3">
               <label className="form-label">
                 Ingredient / Weight{" "}
-                <span className="text-danger">{errorField ? "Fill Ingredients !" : "*"}</span>
+                <span className="text-danger">
+                  {errorField ? "Fill Ingredients !" : "*"}
+                </span>
               </label>
               <div className="row p-0">
                 <div className="col">
@@ -150,7 +197,6 @@ const RecipeForm = ({
                         ingredientName: e.target.value,
                       });
                     }}
- 
                   />
                 </div>
                 <div className="col">
@@ -223,36 +269,33 @@ const RecipeForm = ({
           <div className="mb-3">
             <label className="form-label">Upload Video</label>
             <div className="col">
-            <input
-  type="file"
-  onChange={(e) => {
-    const selectedFile = e.target.files && e.target.files[0]; 
-    if (selectedFile) {
-      setFormFields({
-        ...formFields,
-        video: selectedFile,
-      });
-    }
-  }}
-  className="form-control"
-/>
-
-
+              <input
+                type="file"
+                accept="video/*"
+                // onChange={(e) => handleVideoUpload(e)}
+                className="form-control"
+              />
             </div>
           </div>
           <div className="mb-3">
             <label className="form-label">Upload Image</label>
             <div className="col">
-              <input type="file" className="form-control"   onChange={(e) => {
-    const selectedFile = e.target.files && e.target.files[0]; 
-    if (selectedFile) {
-      setFormFields({
-        ...formFields,
-        image: selectedFile,
-      });
-    }
-  }} />
+              <input
+                type="file"
+                accept="image/*"
+                className="form-control"
+                onChange={handleImageChange}
+              />
             </div>
+            {formFields.image && (
+              <div className="mt-3">
+                <img
+                  src={formFields.image as string}
+                  alt="Uploaded"
+                  style={{ maxWidth: "100%" }}
+                />
+              </div>
+            )}
           </div>
           {edit && (
             <div className="mb-3">
