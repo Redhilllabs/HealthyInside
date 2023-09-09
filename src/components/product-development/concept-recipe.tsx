@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Notification, Transition } from "@mantine/core";
-import { IconAlertCircle, IconCheck } from "@tabler/icons-react";
+import React, { useState } from "react";
+import Swal from "sweetalert2";
 import RecipeForm from "../recipe-form/recipe-form";
 import { SaveConceptRecipe } from "@/services/save-concept-recipe-service";
 import { FormFields } from "@/models/product-development-model";
-
+import { Loader } from "@mantine/core";
 const ConceptRecipe = () => {
   const initialRecipe = {
     recipeName: "",
@@ -16,56 +15,39 @@ const ConceptRecipe = () => {
     equipmentList: [],
     servingPerson: "",
   };
-  const [showNotification, setShowNotification] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const SaveConceptData = async (data: FormFields) => {
     try {
+      setLoading(true);
+
       const response = await SaveConceptRecipe(data);
+
       if (response) {
-        setShowNotification(true);
-        setTimeout(() => {
-          setShowNotification(false);
-        }, 3000);
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        Swal.fire("Recipe Saved Successfully!", "", "success");
       } else {
         console.error("API request failed with status:", response);
       }
     } catch (error) {
       console.error("Error:", error);
+      Swal.fire("", "Failed To Save", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="col-md-12 border bg-white p-3 rounded">
-      {showNotification && (
-        <Transition
-          mounted={showNotification}
-          transition="slide-right"
-          duration={100}
-          timingFunction="ease"
-        >
-          {(styles) => (
-            <div style={styles}>
-              {" "}
-              <Notification
-                icon={<IconCheck size="1.1rem" />}
-                onClose={() => setShowNotification(false)}
-                color="teal"
-                title="Success"
-              >
-                Your Concept is Saved
-              </Notification>
-            </div>
-          )}
-        </Transition>
+      {loading ? (
+        <Loader size="xl" variant="bars" />
+      ) : (
+        <RecipeForm
+          loadFormData={initialRecipe}
+          edit={true}
+          onFormSubmit={(data) => {
+            SaveConceptData(data);
+          }}
+        />
       )}
-      <RecipeForm
-        loadFormData={initialRecipe}
-        edit={true}
-        onFormSubmit={(data) => {
-          SaveConceptData(data);
-        }}
-      />
     </div>
   );
 };

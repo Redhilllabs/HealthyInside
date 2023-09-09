@@ -4,16 +4,17 @@ import React from "react";
 const InputField: React.FC<InputFieldProps> = ({
   type,
   label,
-  value = '',
+  value = "",
   onChange,
   disabled,
   accept,
   fileInput,
+  requiredField = true,
 }) => {
   return (
     <div className="mb-3">
       <label className="form-label">
-        {label} <span className="text-danger">*</span>{" "}
+        {label} {requiredField && <span className="text-danger">*</span>}{" "}
       </label>
       <div className="col">
         {fileInput ? (
@@ -22,6 +23,7 @@ const InputField: React.FC<InputFieldProps> = ({
             accept={accept}
             onChange={onChange}
             className="form-control"
+            required = {requiredField}
           />
         ) : (
           <input
@@ -30,7 +32,7 @@ const InputField: React.FC<InputFieldProps> = ({
             value={value}
             disabled={!disabled}
             onChange={onChange}
-            required
+            required = {requiredField}
           />
         )}
       </div>

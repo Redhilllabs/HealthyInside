@@ -1,8 +1,6 @@
 import React, { FormEvent, useState } from "react";
 import { FormFields } from "@/models/product-development-model";
-import { List, ThemeIcon, Divider } from "@mantine/core";
-import { IconCircleCheck } from "@tabler/icons-react";
-import Image from "next/image";
+import { Divider } from "@mantine/core";
 import ListItems from "../Common-component/list-items";
 import InputField from "../Common-component/input-field";
 const RecipeForm = ({
@@ -71,34 +69,6 @@ const RecipeForm = ({
     }
   };
 
-  const handleVideoUpload = (e: any) => {
-    const selectedFile = e.target.files && e.target.files[0];
-
-    if (selectedFile) {
-      const allowedVideoTypes = ["video/mp4", "video/webm", "video/ogg"];
-
-      if (allowedVideoTypes.includes(selectedFile.type)) {
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-          const base64Video = e?.target?.result || "";
-          setFormFields({
-            ...formFields,
-            video: base64Video,
-          });
-        };
-
-        reader.onerror = (error) => {
-          console.error("Error reading file:", error);
-        };
-
-        reader.readAsDataURL(selectedFile);
-      } else {
-        // Handle the case where the selected file is not a valid video
-        alert("Please select a valid video file (MP4, WebM, or OGG)");
-      }
-    }
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,7 +80,7 @@ const RecipeForm = ({
 
     setError(false);
     onFormSubmit(formFields);
-    // setFormFields(loadFormData);
+    setFormFields(loadFormData);
   };
 
 
@@ -253,7 +223,7 @@ const RecipeForm = ({
             </div>
           </div>
           <Divider my="xs" label="Optional" labelPosition="center" />
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <InputField
               type="file"
               label="Upload Video"
@@ -261,7 +231,7 @@ const RecipeForm = ({
               onChange={(e) => handleVideoUpload(e)}
               disabled={edit}
             />
-          </div>
+          </div> */}
           <div className="mb-3">
             <InputField
               type="file"
@@ -269,6 +239,7 @@ const RecipeForm = ({
               accept="image/*"
               onChange={handleImageChange}
               disabled={edit}
+              requiredField = {false}
             />
             {formFields.image && (
               <div className="mt-3">

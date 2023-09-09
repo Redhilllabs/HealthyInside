@@ -8,4 +8,5 @@ export interface InputFieldProps {
     disabled: boolean;
     accept?: string; // Optional for file inputs
     fileInput?: boolean; // Indicate if it's a file input
+    requiredField?: boolean
   }
