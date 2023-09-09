@@ -1,11 +1,11 @@
-export interface Ingredient {
+export interface IngredientItem {
   ingredientName: string;
   ingredientUnit: string;
   ingredientQuantity: string;
 }
 export interface FormFields {
   recipeName: string;
-  ingredientList: Ingredient[];
+  ingredientList: IngredientItem[];
   cookingProcess: string;
   video: string | ArrayBuffer | null;
   image: string | ArrayBuffer | null;

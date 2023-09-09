@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Notification, Transition } from "@mantine/core";
 import { IconAlertCircle, IconCheck } from "@tabler/icons-react";
-import RecipeForm from "../recipe-form";
+import RecipeForm from "../recipe-form/recipe-form";
 import { SaveConceptRecipe } from "@/services/save-concept-recipe-service";
 import { FormFields } from "@/models/product-development-model";
 

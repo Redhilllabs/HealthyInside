@@ -62,7 +62,7 @@ const Statistics = () => {
       <Bar options={options} data={userData} />
     </div>
     <div className="col-md-6">
-      <div className="d-flex flex-column mt-3">
+      <div className="d-flex  mt-3">
         <div className="m-2">
           <button className="btn bg-primary text-white">Membership 100</button>
         </div>

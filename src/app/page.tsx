@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { IconChecklist, IconDeviceDesktopAnalytics ,IconUsers } from "@tabler/icons-react";
-import Statistics from "@/components/statistics";
+import Statistics from "@/components/statistics-component/statistics";
 import NavbarComponent from "@/components/navbar";
 import { useDisclosure } from "@mantine/hooks";
 import { LoadingOverlay} from "@mantine/core";
@@ -47,7 +47,7 @@ const Homepage = () => {
       setIsLoading(false);
       toggle();
     }, 2000);
-  }, []);
+  }, [toggle]);
 
   const handleTabChange = (value: string) => {
     setCurrentTab(value);

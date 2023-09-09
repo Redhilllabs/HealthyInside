@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal, ScrollArea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import RecipeForm from "../recipe-form";
+import RecipeForm from "../recipe-form/recipe-form";
 import { FormFields } from "@/models/product-development-model";
 
 const TestRecipe = () => {

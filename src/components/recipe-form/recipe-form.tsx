@@ -3,6 +3,8 @@ import { FormFields } from "@/models/product-development-model";
 import { List, ThemeIcon, Divider } from "@mantine/core";
 import { IconCircleCheck } from "@tabler/icons-react";
 import Image from "next/image";
+import ListItems from "../Common-component/list-items";
+import InputField from "../Common-component/input-field";
 const RecipeForm = ({
   loadFormData,
   edit,
@@ -69,35 +71,34 @@ const RecipeForm = ({
     }
   };
 
-  
-  // const handleVideoUpload = (e: any) => {
-  //   const selectedFile = e.target.files && e.target.files[0];
+  const handleVideoUpload = (e: any) => {
+    const selectedFile = e.target.files && e.target.files[0];
 
-  //   if (selectedFile) {
-  //     const allowedVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
+    if (selectedFile) {
+      const allowedVideoTypes = ["video/mp4", "video/webm", "video/ogg"];
 
-  //     if (allowedVideoTypes.includes(selectedFile.type)) {
-  //       const reader = new FileReader();
+      if (allowedVideoTypes.includes(selectedFile.type)) {
+        const reader = new FileReader();
 
-  //       reader.onload = (e) => {
-  //         const base64Video = e?.target?.result || '';
-  //         setFormFields({
-  //           ...formFields,
-  //           video: base64Video,
-  //         });
-  //       };
+        reader.onload = (e) => {
+          const base64Video = e?.target?.result || "";
+          setFormFields({
+            ...formFields,
+            video: base64Video,
+          });
+        };
 
-  //       reader.onerror = (error) => {
-  //         console.error('Error reading file:', error);
-  //       };
+        reader.onerror = (error) => {
+          console.error("Error reading file:", error);
+        };
 
-  //       reader.readAsDataURL(selectedFile);
-  //     } else {
-  //       // Handle the case where the selected file is not a valid video
-  //       alert('Please select a valid video file (MP4, WebM, or OGG)');
-  //     }
-  //   }
-  // };
+        reader.readAsDataURL(selectedFile);
+      } else {
+        // Handle the case where the selected file is not a valid video
+        alert("Please select a valid video file (MP4, WebM, or OGG)");
+      }
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,67 +112,53 @@ const RecipeForm = ({
     onFormSubmit(formFields);
     // setFormFields(loadFormData);
   };
+
+
   return (
     <>
       <form className="row mt-2" onSubmit={(e) => handleSubmit(e)}>
         <div className="col-md-6">
-          <div className="mb-3">
-            <label className="form-label">
-              Recipe Name<span className="text-danger">*</span>{" "}
-            </label>
-            <div className="col">
-              <input
-                type="text"
-                value={formFields.recipeName}
-                className="form-control"
-                disabled={!edit}
-                onChange={(e) =>
-                  setFormFields({
-                    ...formFields,
-                    recipeName: e.target.value,
-                  })
-                }
-                required
-              />
-            </div>
-          </div>
+          <InputField
+            type="text"
+            label="Recipe Name"
+            value={formFields.recipeName}
+            onChange={(e) =>
+              setFormFields({
+                ...formFields,
+                recipeName: e.target.value,
+              })
+            }
+            disabled={edit}
+          />
           <div className="mb-3">
             <div className="row p-0">
               <div className="col">
-                <label className="form-label">
-                  Cooking Time <span className="text-danger">*</span>{" "}
-                </label>
-                <input
+                <InputField
                   type="time"
-                  className="form-control"
-                  required
+                  label="Cooking Time"
                   value={formFields.cookingTime}
-                  disabled={!edit}
                   onChange={(e) =>
                     setFormFields({
                       ...formFields,
                       cookingTime: e.target.value,
                     })
                   }
+                  disabled={edit}
                 />
               </div>
 
               <div className="col">
-                <label className="form-label">
-                  Serving Person <span className="text-danger">*</span>{" "}
-                </label>
-                <input
+                <InputField
                   type="number"
-                  className="form-control"
-                  required
+                  label="Serving Person"
                   value={formFields.servingPerson}
-                  disabled={!edit}
                   onChange={(e) =>
                     setFormFields({
                       ...formFields,
                       servingPerson: e.target.value,
                     })
                   }
+                  disabled={edit}
                 />
               </div>
             </div>
@@ -267,26 +254,22 @@ const RecipeForm = ({
           </div>
           <Divider my="xs" label="Optional" labelPosition="center" />
           <div className="mb-3">
-            <label className="form-label">Upload Video</label>
-            <div className="col">
-              <input
-                type="file"
-                accept="video/*"
-                // onChange={(e) => handleVideoUpload(e)}
-                className="form-control"
-              />
-            </div>
+            <InputField
+              type="file"
+              label="Upload Video"
+              accept="video/*"
+              onChange={(e) => handleVideoUpload(e)}
+              disabled={edit}
+            />
           </div>
           <div className="mb-3">
-            <label className="form-label">Upload Image</label>
-            <div className="col">
-              <input
-                type="file"
-                accept="image/*"
-                className="form-control"
-                onChange={handleImageChange}
-              />
-            </div>
+            <InputField
+              type="file"
+              label="Upload Image"
+              accept="image/*"
+              onChange={handleImageChange}
+              disabled={edit}
+            />
             {formFields.image && (
               <div className="mt-3">
                 <img
@@ -321,54 +304,17 @@ const RecipeForm = ({
         </div>
         <div className="col-md-6">
           <div className="mb-3">
-            <label className="form-label">Ingredients List</label>
-            <div className="col">
-              <div className="border rounded p-3 d-flex">
-                <List
-                  spacing="xs"
-                  size="sm"
-                  center
-                  icon={
-                    <ThemeIcon color="teal" size={24} radius="xl">
-                      <IconCircleCheck size="1rem" />
-                    </ThemeIcon>
-                  }
-                >
-                  {formFields.ingredientList?.map((item, index) => (
-                    <div key={item.ingredientName} className="p-1">
-                      <List.Item>
-                        {" "}
-                        {item.ingredientName} {item.ingredientQuantity}{" "}
-                        {item.ingredientUnit}
-                      </List.Item>
-                    </div>
-                  ))}
-                </List>
-              </div>
-            </div>
+            <ListItems
+              title="Ingredients List"
+              items={formFields.ingredientList || []}
+              isIngredients
+            />
           </div>
           <div className="mb-3">
-            <label className="form-label">Equipments List</label>
-            <div className="col">
-              <div className="border rounded p-3">
-                <List
-                  spacing="xs"
-                  size="sm"
-                  center
-                  icon={
-                    <ThemeIcon color="teal" size={24} radius="xl">
-                      <IconCircleCheck size="1rem" />
-                    </ThemeIcon>
-                  }
-                >
-                  {formFields.equipmentList?.map((item, index) => (
-                    <div key={item} className="p-1">
-                      <List.Item> {item}</List.Item>
-                    </div>
-                  ))}
-                </List>
-              </div>
-            </div>
+            <ListItems
+              title="Equipments List"
+              items={formFields.equipmentList || []}
+            />
           </div>
         </div>
         <div className="col text-center">
