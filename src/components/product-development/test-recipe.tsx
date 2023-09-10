@@ -1,128 +1,115 @@
-import React, { useState } from "react";
-import { Button, Modal, ScrollArea } from "@mantine/core";
+import React, { useState, useEffect } from "react";
+import { Button, List, ThemeIcon, Loader } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import RecipeForm from "../recipe-form/recipe-form";
 import { FormFields } from "@/models/product-development-model";
+import { getProductListByStatus } from "@/services/get-recipe-by-status";
+import { IconCircleCheck, IconCircleDashed } from "@tabler/icons-react";
+import { StatusList } from "../Common-component/recipe-status-list";
 
 const TestRecipe = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [hidebutton, setbuttonfalse] = useState(true);
-  const [modalContent, setModalContent] = useState<string[]>([]);
-  const [selectedRecipe, setSelectedRecipe] = useState<string | null>(null);
+  const [recipeList, setRecipeList] = useState<FormFields[]>([]);
+  const [selectedRecipe, setSelectedRecipe] = useState<FormFields | null>(null);
   const [enableEdit, setEnableEdit] = useState(false);
-  const OpenRecipesList = (value: string) => {
-    setModalContent([
-      "Recipe1",
-      "Recipe2",
-      "Recipe3",
-      "Recipe4",
-      "Recipe5",
-      "Recipe6",
-    ]);
-    open();
-    setbuttonfalse(false);
+  const [buttonsVisible, setButtonsVisible] = useState(true);
+  const [loading, setLoading] = useState(false); // Add loading state
+
+  const OpenRecipesList = async (value: string) => {
+    setLoading(true); 
+    try {
+      const recipeList = await getProductListByStatus(value);
+      setRecipeList(recipeList);
+      open();
+      setButtonsVisible(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); 
+    }
   };
 
-  const renderButton = (label: string) => (
-    <div className="m-3">
-      <Button
-        color="indigo"
-        radius="xs"
-        size="xl"
-        uppercase
-        onClick={() => OpenRecipesList(label)}
-      >
-        {label}
-      </Button>
-    </div>
+  const renderButton = (category: any) => (
+    <Button
+      key={category.value}
+      color="indigo"
+      radius="xs"
+      size="xl"
+      uppercase
+      className={`m-3 ${buttonsVisible ? "" : "d-none"}`}
+      onClick={() => OpenRecipesList(category.value)}
+      disabled={!buttonsVisible}
+    >
+      {category.label}
+    </Button>
   );
-  const [recipe, setRecipe] = useState<FormFields>({
-    recipeName: "",
-    ingredientList: [],
-    cookingProcess: "",
-    video: null,
-    image: null,
-    cookingTime: "",
-    equipmentList: [],
-    servingPerson: "",
-  });
-  const renderPreviewRecipe = (item: string) => {
+
+  const renderPreviewRecipe = (item: FormFields) => {
     setSelectedRecipe(item);
-    setRecipe({
-      recipeName: "RecipeName",
-      ingredientList: [
-        {
-          ingredientName: "IngredientName",
-          ingredientUnit: "10",
-          ingredientQuantity: "gm",
-        },
-      ],
-      cookingProcess: "this is the cooking process",
-      video: null,
-      image: null,
-      cookingTime: "",
-      equipmentList: [],
-      servingPerson: "",
-    });
     setEnableEdit(false);
     close();
   };
 
+  const goBackToList = () => {
+    setSelectedRecipe(null);
+    open();
+  };
+
   return (
-    <div className="container">
-      {hidebutton && (
-        <div className="container p-5 text-center bg-white">
-          <div className="d-flex justify-content-center">
-            <div className="d-flex flex-wrap">
-              {renderButton("New Recipes")}
-              {renderButton("Tested Recipe")}
-              {renderButton("In-Test Recipes")}
-            </div>
-          </div>
-          <br />
-          <div className="d-flex justify-content-center">
-            <div className="d-flex flex-wrap">
-              {renderButton("Rejected Recipe")}
-              {renderButton("Incomplete Data")}
-            </div>
-          </div>
+    <div className="container text-center p-5 bg-white">
+      <div className="d-flex justify-content-center">
+        <div className="d-flex flex-wrap">
+          {Object.values(StatusList.categories).map((category) =>
+            renderButton(category)
+          )}
         </div>
-      )}
-
-      <div>
-        {opened &&
-          modalContent.map((item, index) => (
-            <div
-              key={item}
-              className="list bg-primary text-center m-1 text-white"
-              onClick={() => renderPreviewRecipe(item)}
-            >
-              <p>{item}</p>
-            </div>
-          ))}
       </div>
-
-      <div className="col-md-12 border bg-white p-3 rounded">
-        {selectedRecipe && (
+      {loading ? ( 
+        <Loader />
+      ) : selectedRecipe ? (
+        <div className="col-md-12 border bg-white p-3 rounded">
           <div className="row mt-2">
             <div className="d-flex justify-content-between">
+              <button
+                className="btn bg-primary text-white m-1"
+                onClick={goBackToList}
+              >
+                Back to List
+              </button>
               <button
                 className="btn bg-primary text-white m-1"
                 onClick={() => setEnableEdit(true)}
               >
                 Edit
               </button>
-              <button className="btn bg-primary text-white m-1">Skip</button>
             </div>
 
             <RecipeForm
-              loadFormData={recipe}
+              loadFormData={selectedRecipe}
               edit={enableEdit}
-              onFormSubmit={(data) => setRecipe(data)}
+              onFormSubmit={(data) => setSelectedRecipe(data)}
             />
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <List
+          spacing="xs"
+          size="sm"
+          center
+          icon={
+            <ThemeIcon color="teal" size={24} radius="xl">
+              <IconCircleCheck size="1rem" />
+            </ThemeIcon>
+          }
+        >
+          {opened &&
+            recipeList.map((item, index) => (
+              <List.Item key={index} onClick={() => renderPreviewRecipe(item)}>
+                {item?.recipeName}
+              </List.Item>
+            ))}
+        </List>
+      )}
     </div>
   );
 };

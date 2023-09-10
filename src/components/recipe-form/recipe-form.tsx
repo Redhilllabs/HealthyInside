@@ -223,15 +223,19 @@ const RecipeForm = ({
             </div>
           </div>
           <Divider my="xs" label="Optional" labelPosition="center" />
-          {/* <div className="mb-3">
+          <div className="mb-3">
             <InputField
-              type="file"
+              type="text"
               label="Upload Video"
-              accept="video/*"
-              onChange={(e) => handleVideoUpload(e)}
+              onChange={(e) =>
+                setFormFields({
+                  ...formFields,
+                  video: e.target.value,
+                })}
               disabled={edit}
+              requiredField = {false}
             />
-          </div> */}
+          </div>
           <div className="mb-3">
             <InputField
               type="file"
@@ -288,11 +292,13 @@ const RecipeForm = ({
             />
           </div>
         </div>
+        {edit ?
         <div className="col text-center">
-          <button className="btn btn-bg bg-primary text-white " type="submit">
-            {edit ? "Submit" : "Update"}
+          <button className="btn btn-bg bg-primary text-white" type="submit">
+            Submit 
           </button>
         </div>
+        :''}
       </form>
     </>
   );
