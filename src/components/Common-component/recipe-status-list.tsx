@@ -5,20 +5,20 @@ export const StatusList = {
       value: "NewRecipe",
     },
     category2: {
-      label: "Tested Recipe",
-      value: "Tested Recipe",
+      label: "In-Test Recipes",
+      value: "inTest",
     },
     category3: {
-      label: "In-Test Recipes",
-      value: "In-Test Recipes",
+      label: "Rejected Recipe",
+      value: "rejected",
     },
     category4: {
-      label: "Rejected Recipe",
-      value: "Rejected Recipe",
+      label: "Incomplete Data",
+      value: "incomplete",
     },
     category5: {
-      label: "Incomplete Data",
-      value: "Incomplete Data",
+      label: "Tested Recipe",
+      value: "Tested",
     },
   },
 };

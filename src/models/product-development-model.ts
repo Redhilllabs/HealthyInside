@@ -12,5 +12,6 @@ export interface FormFields {
   equipmentList: string[];
   cookingTime: string;
   servingPerson: string;
+  productid:number
 }
 

@@ -69,7 +69,6 @@ const RecipeForm = ({
     }
   };
 
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formFields.ingredientList || formFields.ingredientList.length === 0) {
@@ -82,7 +81,6 @@ const RecipeForm = ({
     onFormSubmit(formFields);
     setFormFields(loadFormData);
   };
-
 
   return (
     <>
@@ -231,9 +229,10 @@ const RecipeForm = ({
                 setFormFields({
                   ...formFields,
                   video: e.target.value,
-                })}
+                })
+              }
               disabled={edit}
-              requiredField = {false}
+              requiredField={false}
             />
           </div>
           <div className="mb-3">
@@ -243,14 +242,14 @@ const RecipeForm = ({
               accept="image/*"
               onChange={handleImageChange}
               disabled={edit}
-              requiredField = {false}
+              requiredField={false}
             />
             {formFields.image && (
               <div className="mt-3">
                 <img
                   src={formFields.image as string}
                   alt="Uploaded"
-                  style={{ maxWidth: "100%" }}
+                  style={{ maxWidth: "50%", borderRadius: "5px" }}
                 />
               </div>
             )}
@@ -283,22 +282,34 @@ const RecipeForm = ({
               title="Ingredients List"
               items={formFields.ingredientList || []}
               isIngredients
+              removeItem={(index) => {
+                const updatedFormFields = { ...formFields };
+                updatedFormFields.ingredientList.splice(index, 1);
+                setFormFields(updatedFormFields);
+              }}
             />
           </div>
           <div className="mb-3">
             <ListItems
               title="Equipments List"
               items={formFields.equipmentList || []}
+              removeItem={(index) => {
+                const updatedFormFields = { ...formFields };
+                updatedFormFields.equipmentList.splice(index, 1);
+                setFormFields(updatedFormFields);
+              }}
             />
           </div>
         </div>
-        {edit ?
-        <div className="col text-center">
-          <button className="btn btn-bg bg-primary text-white" type="submit">
-            Submit 
-          </button>
-        </div>
-        :''}
+        {edit ? (
+          <div className="col text-center">
+            <button className="btn btn-bg bg-primary text-white" type="submit">
+              Submit
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
       </form>
     </>
   );

@@ -1,17 +1,19 @@
 import React from "react";
 import { List, ThemeIcon } from "@mantine/core";
-import { IconCircleCheck } from "@tabler/icons-react";
+import { IconCircleCheck, IconTrash } from "@tabler/icons-react";
 import { IngredientItem } from "@/models/product-development-model";
 
 interface ListItemsProps {
   title: string;
   items: (string | IngredientItem)[];
   isIngredients?: boolean;
+  removeItem : (index:number)=> void;
 }
 const ListItems: React.FC<ListItemsProps> = ({
   title,
   items,
   isIngredients,
+  removeItem,
 }) => {
   return (
     <div>
@@ -28,7 +30,7 @@ const ListItems: React.FC<ListItemsProps> = ({
           }
         >
           {items.map((item, index) => (
-            <div key={index} className="p-1">
+            <div key={index + 1} className=" d-flex justify-content-between p-1">
               <List.Item>
                 <>
                   {isIngredients && typeof item !== "string"
@@ -36,6 +38,9 @@ const ListItems: React.FC<ListItemsProps> = ({
                     : item}
                 </>
               </List.Item>
+              <div className="deleteButton ms-1" onClick={()=>removeItem(index)}>
+                <IconTrash size="1rem"/>
+              </div>
             </div>
           ))}
         </List>
